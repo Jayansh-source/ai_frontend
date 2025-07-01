@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worm GPT - a_lonely_ooo</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNmU0NWUyO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4ZDNjZTtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBpbj0iU291cmNlR3JhcGhpYyIgc3RkRGV2aWF0aW9uPSIxIiByZXN1bHR9ImJsdXIiLz48ZmVNZXJnZT48ZmVNZXJnZU5vZGUgaW49ImJsdXIiLz48ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz48L2ZlTWVyZ2U+PC9maWx0ZXI+PC9kZWZzPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIsIDIpIj48cGF0aCBkPSJNMCAxMiBRNCA4IDggMTIgUTEyIDE2IDE2IDEyIFEyMCA4IDI0IDEyIFEyOCAxNiAzMiAxMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2dyYWRpZW50KSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbHRlcj0idXJsKCNnbG93KSI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iZCIgdmFsdWVzPSJNMCAxMiBRNCA4IDggMTIgUTEyIDE2IDE2IDEyIFEyMCA4IDI0IDEyIFEyOCAxNiAzMiAxMjtNMCAxMiBRNCAxMCA4IDE0IFEyMiAxOCAxNiAxNCBRMjAgMTAgMjQgMTQgUTI4IDE4IDMyIDE0O00wIDEyIFE0IDE0IDggMTAgUTEyIDYgMTYgMTAgUTI0IDE0IDI0IDEwIFEyOCA2IDMyIDEwO00wIDEyIFE0IDggOCAxMiBRMTIgMTYgMTYgMTIgUTI0IDggMjQgMTIgUTI4IDE2IDMyIDEyIiBkdXI9IjJzIiByZXBlYXRDb3VudD0iMSIgY2FsY01vZGU9InNwbGluZSIga2V5VGltZXM9IjA7MC4zMzswLjY2OzEiIGtleVNwbGluZXM9IjAuNSAwIDAuNSAxOzAuNSAwIDAuNSAxOzAuNSAwIDAuNSAxIi8+PC9wYXRoPjwvZz48L3N2Zz4=">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    aside { overflow-y: auto; }
+    
+    .chat-item-container {
+        position: relative;
+    }
+    .chat-actions {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: #1a1a1a;
+        border-radius: 4px;
+        z-index: 10;
+    }
+    .chat-item-container:hover .chat-actions {
+        display: flex;
+    }
+    .chat-action-btn {
+        padding: 2px 6px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    .rename-input {
+        background: #2d3748;
+        color: white;
+        border: 1px solid #4a5568;
+        padding: 2px 4px;
+        width: 100%;
+    }
+    .undo-notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #6e45e2;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 1000;
+    }
+    .undo-btn {
+        background: white;
+        color: #6e45e2;
+        border: none;
+        padding: 2px 8px;
+        border-radius: 12px;
+        cursor: pointer;
+    }
+    .undo-timer {
+        width: 20px;
+        height: 20px;
+        position: relative;
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeInUp {
+      animation: fadeInUp 0.4s ease-in-out;
+    }
+    #voice-chat-section, #image-gen-section { display: none; }
+    .pulse-animation {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+    .code-block {
+      background: #282c34;
+      border-radius: 6px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      border-left: 3px solid #6e45e2;
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      background: #1f2937;
+      color: #9ca3af;
+      font-size: 0.8rem;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+    .copy-btn {
+      background: #3b4252;
+      color: white;
+      border: none;
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+    .image-gen-btn {
+      background: linear-gradient(45deg, #6e45e2, #88d3ce);
+    }
+    .generated-image {
+      transition: transform 0.3s;
+    }
+    .generated-image:hover {
+      transform: scale(1.03);
+    }
+    .interrupted-text {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .continue-btn {
+      background: #4a5568;
+      color: white;
+      border: none;
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      transition: background 0.2s;
+    }
+    .continue-btn:hover {
+      background: #6b7280;
+    }
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .logo {
+      width: 160px;
+      height: auto;
+      filter: drop-shadow(0 0 8px rgba(110, 69, 226, 0.5));
+      transition: transform 0.2s;
+    }
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    .user-message {
+      background-color: rgba(55, 65, 81, 0.7);
+      backdrop-filter: blur(4px);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      max-width: fit-content;
+      display: inline-block;
+      min-width: 16rem;
+      max-width: 48rem;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .bot-message {
+      background: none;
+      color: #d1d5db;
+      font-size: 1.1rem;
+      font-weight: 300;
+      max-width: 48rem;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      text-shadow: 0 0 4px rgba(110, 69, 226, 0.3);
+      white-space: normal;
+      word-break: break-word;
+    }
+    .bot-message strong {
+      font-weight: 700 !important;
+    }
+    .bot-message em {
+      font-style: italic !important;
+    }
+    .heading {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #d1d5db;
+      text-align: center;
+      margin: 1rem 0;
+    }
+    .point {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #d1d5db;
+      text-align: left;
+      padding-left: 1.5rem;
+      margin: 0.5rem 0;
+    }
+    #chat-form-container.initial {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      background: transparent;
+    }
+    #chat-form-container {
+      position: sticky;
+      bottom: 0;
+      background: #1f2937;
+      padding: 1rem;
+      border-top: 1px solid #374151;
+      transition: all 0.3s ease;
+    }
+    #chat-input {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 0.375rem;
+      background-color: #374151;
+      border: 1px solid #4b5563;
+      color: white;
+      outline: none;
+      resize: none;
+      rows: 1;
+      transition: height 0.2s ease;
+    }
+    #chat-input:focus {
+      border-color: #9333ea;
+      box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.3);
+      rows: 3;
+    }
+    #sidebar {
+      width: 16rem;
+      transform: translateX(0);
+      transition: all 0.3s ease;
+    }
+    #sidebar.collapsed {
+      width: 0;
+      transform: translateX(-16rem);
+      overflow: hidden;
+    }
+    main {
+      margin-left: 16rem;
+      transition: margin-left 0.3s ease;
+    }
+    main.sidebar-collapsed {
+      margin-left: 0;
+    }
+    .loading-animation {
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .loading-svg {
+      width: 80px;
+      height: 40px;
+    }
+    @keyframes glowPulse {
+      0% { filter: url(#glow); }
+      50% { filter: url(#glow) brightness(1.5); }
+      100% { filter: url(#glow); }
+    }
+    .loading-svg path {
+      animation: glowPulse 1.5s infinite;
+    }
+    .bullet-point {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #d1d5db;
+      text-align: left;
+      padding-left: 1.5rem;
+      position: relative;
+      margin: 0.5rem 0;
+    }
+    .bullet-point::before {
+      content: "•";
+      position: absolute;
+      left: 0.25rem;
+      color: #6e45e2;
+    }
+    #left-arrow-btn.hidden {
+      display: none;
+    }
+    #left-arrow-btn {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      background: none;
+      color: #d1d5db;
+      font-size: 1rem;
+      padding: 0.5rem;
+      opacity: 0.3;
+      transition: opacity 0.2s;
+      z-index: 1000;
+    }
+    #left-arrow-btn:hover {
+      opacity: 0.7;
+    }
+    
+  </style>
+</head>
+<body class="h-full flex font-sans">
+  <aside id="sidebar" class="w-64 bg-gradient-to-b from-gray-800 to-black p-4 flex flex-col justify-between shadow-2xl fixed h-full overflow-y-auto">
+    <button id="toggle-sidebar-btn" class="absolute top-2 right-2 text-gray-400 hover:text-white">←</button>
+    <div>
+      <div class="logo-container flex items-center justify-center p-2">
+       <img id="logo-img" src="/static/logo." alt="Worm GPT Logo" class="logo max-w-full max-h-[100px] w-auto h-auto object-scale-down">
+      </div>
+      <button id="new-chat-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded mb-6 transition-all">+ New Chat</button>
+      <button id="image-gen-btn" class="w-full image-gen-btn hover:opacity-90 text-white py-2 rounded mb-6 transition-all">🖼️ Image Generator</button>
+      <div class="text-gray-400 text-sm">
+        <p class="mb-2">Chat History</p>
+        <ul id="chat-history-list" class="space-y-2"></ul>
+      </div>
+    </div>
+    <div class="text-sm text-gray-500 space-y-1">
+      <p>Worm GPT</p>
+      <p>Version 1</p>
+      <p>Early Access</p>
+      <p>© 2025 a_lonely_ooo</p>
+    </div>
+  </aside>
+  <main class="flex-1 flex flex-col ml-64">
+    <div class="flex-1 flex flex-col">
+      <div class="flex justify-center mt-2">
+        <button id="toggle-chat-mode" class="bg-purple-600 hover:bg-purple-700 px-4 py-1 rounded-full text-sm">
+          🎤 Switch to Voice Chat
+        </button>
+      </div>
+      <div id="text-chat-section" class="flex-1 overflow-y-auto">
+        <div id="chat" class="p-6 space-y-2 bg-black/30 backdrop-blur-md">
+          <div class="flex justify-center animate-fadeInUp">
+            <div class="bot-message text-white max-w-4xl mx-auto">Hi, bhai! How can I assist you today?</div>
+          </div>
+        </div>
+      </div>
+      <div id="chat-form-container" class="bg-gray-800 p-4 border-t border-gray-700 sticky bottom-0">
+        <form id="chat-form" class="flex items-center space-x-2 max-w-4xl mx-auto">
+          <textarea id="chat-input" placeholder="Type your message..." class="flex-1 p-3 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"></textarea>
+          <button type="button" id="text-mic-btn" class="bg-purple-600 hover:bg-purple-700 p-2 rounded text-white">🎤</button>
+          <button type="submit" id="submit-btn" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-white transition-all">Send</button>
+        </form>
+      </div>
+    </div>
+    <div id="voice-chat-section" class="flex-1 flex flex-col items-center justify-center p-6 bg-black/30">
+      <div id="voice-status" class="text-lg mb-4">Press mic to start speaking</div>
+      <button id="voice-mic-btn" class="bg-red-500 hover:bg-red-600 p-6 rounded-full text-white text-2xl">
+        🎤
+      </button>
+      <div id="voice-chat-messages" class="w-full max-w-4xl mt-6 space-y-2 hidden"></div>
+    </div>
+    <div id="image-gen-section" class="flex-1 flex flex-col p-6 bg-black/30 hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl">🖼️ Generate Images</h2>
+        <button id="back-to-chat-btn" class="bg-purple-600 hover:bg-purple-700 px-4 py-1 rounded-full text-sm">
+          ← Back to Chat
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto">
+        <div id="image-prompt-input" class="mb-4">
+          <input type="text" id="image-prompt" placeholder="Describe your image..." 
+                class="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+          <button id="generate-image-btn" class="mt-2 w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white py-2 rounded transition-all">
+            Generate Image
+          </button>
+        </div>
+        <div id="generated-images" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+    </div>
+  </main>
+  <button id="left-arrow-btn" class="hidden">→</button>
+  <script>
+    let currentChatId = 'chat-' + Date.now();
+    let chats = JSON.parse(localStorage.getItem('wormgpt-chats')) || {};
+    let deletedChat = null;
+    let undoTimeout = null;
+    let interruptedMessage = null;
+    let interruptedIndex = 0;
+    function init() {
+      if (!chats[currentChatId]) {
+        chats[currentChatId] = {
+          title: 'New Chat',
+          messages: [{ sender: 'bot', content: 'Hi, bhai! How can I assist you today?' }],
+          timestamp: Date.now()
+        };
+        saveChats();
+      }
+      updateChatList();
+      loadChat(currentChatId);
+      const chatFormContainer = document.getElementById('chat-form-container');
+      if (chatFormContainer) {
+        chatFormContainer.classList.add('initial');
+      }
+      triggerLogoAnimation();
+    }
+    function saveChats() {
+      localStorage.setItem('wormgpt-chats', JSON.stringify(chats));
+      updateChatList();
+    }
+    function updateChatList() {
+      const list = document.getElementById('chat-history-list');
+      if (!list) return;
+      list.innerHTML = '';
+      Object.entries(chats).sort((a, b) => b[1].timestamp - a[1].timestamp).forEach(([id, chat]) => {
+        const li = document.createElement('li');
+        li.className = `chat-item-container hover:bg-gray-700 cursor-pointer text-gray-400 ${id === currentChatId ? 'text-purple-400' : ''}`;
+        li.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="chat-name">${chat.title}</span>
+            <div class="chat-actions space-x-1">
+              <span class="chat-action-btn text-yellow-400" onclick="renameChat('${id}', event)">✏️</span>
+              <span class="chat-action-btn text-red-400" onclick="deleteChat('${id}', event)">🗑️</span>
+            </div>
+          </div>
+        `;
+        li.onclick = (e) => {
+          if (!e.target.classList.contains('chat-action-btn')) {
+            loadChat(id);
+          }
+        };
+        list.appendChild(li);
+      });
+    }
+    function showUndoNotification(chatId) {
+      const existingNotification = document.querySelector('.undo-notification');
+      if (existingNotification) {
+        existingNotification.remove();
+        clearTimeout(undoTimeout);
+      }
+      const notification = document.createElement('div');
+      notification.className = 'undo-notification';
+      notification.innerHTML = `
+        <span>Chat deleted</span>
+        <div class="undo-timer">
+          <svg viewBox="0 0 20 20">
+            <circle cx="10" cy="10" r="9" fill="none" stroke="white" stroke-width="2" stroke-dasharray="56.5487" stroke-dashoffset="0">
+              <animate attributeName="stroke-dashoffset" from="0" to="56.5487" dur="3s" fill="freeze"/>
+            </circle>
+          </svg>
+        </div>
+        <button class="undo-btn" onclick="undoDelete()">Undo</button>
+      `;
+      document.body.appendChild(notification);
+      undoTimeout = setTimeout(() => {
+        notification.remove();
+        deletedChat = null;
+      }, 3000);
+    }
+    function undoDelete() {
+      if (deletedChat) {
+        chats[deletedChat.id] = deletedChat.data;
+        saveChats();
+        const notification = document.querySelector('.undo-notification');
+        if (notification) notification.remove();
+        clearTimeout(undoTimeout);
+        deletedChat = null;
+      }
+    }
+    function renameChat(chatId, event) {
+      event.stopPropagation();
+      const listItem = event.target.closest('li');
+      const nameSpan = listItem.querySelector('.chat-name');
+      const currentName = chats[chatId].title;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = currentName;
+      input.className = 'rename-input';
+      nameSpan.replaceWith(input);
+      input.focus();
+      const handleRename = () => {
+        const newName = input.value.trim() || currentName;
+        chats[chatId].title = newName;
+        saveChats();
+        input.replaceWith(nameSpan);
+        nameSpan.textContent = newName;
+        input.removeEventListener('blur', handleRename);
+        input.removeEventListener('keypress', handleKeyPress);
+      };
+      const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+          handleRename();
+        }
+      };
+      input.addEventListener('blur', handleRename);
+      input.addEventListener('keypress', handleKeyPress);
+    }
+    async function deleteChat(chatId, event) {
+      event.stopPropagation();
+      deletedChat = {
+        id: chatId,
+        data: { ...chats[chatId] }
+      };
+      delete chats[chatId];
+      saveChats();
+      try {
+        const res = await fetch(`/clear_memory/${chatId}`, { method: 'POST' });
+        const data = await res.json();
+        console.log(data.message);
+      } catch (err) {
+        console.warn('Error clearing memory:', err);
+      }
+      showUndoNotification(chatId);
+      if (chatId === currentChatId) {
+        startNewChat();
+      }
+    }
+    async function startNewChat() {
+      currentChatId = 'chat-' + Date.now();
+      chats[currentChatId] = {
+        title: 'New Chat',
+        messages: [{ sender: 'bot', content: 'Hi, bhai! How can I assist you today?' }],
+        timestamp: Date.now()
+      };
+      saveChats();
+      loadChat(currentChatId);
+      const chatFormContainer = document.getElementById('chat-form-container');
+      if (chatFormContainer) {
+        chatFormContainer.classList.add('initial');
+      }
+      triggerLogoAnimation();
+      try {
+        const res = await fetch(`/clear_memory/${currentChatId}`, { method: 'POST' });
+        const data = await res.json();
+        console.log(data.message);
+      } catch (err) {
+        console.warn('Error clearing memory:', err);
+      }
+    }
+    function loadChat(chatId) {
+      const chat = chats[chatId];
+      if (!chat) return;
+      currentChatId = chatId;
+      const chatContainer = document.getElementById('chat');
+      if (!chatContainer) return;
+      chatContainer.innerHTML = '';
+      chat.messages.forEach(msg => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `flex ${msg.sender === 'user' ? 'justify-end' : 'justify-center'} animate-fadeInUp`;
+        msgDiv.innerHTML = `
+          <div class="${msg.sender === 'user' ? 'bg-gray-700/70 backdrop-blur-sm user-message' : 'bot-message'} text-white ${msg.sender === 'user' ? 'p-2 rounded-lg' : ''} max-w-fit min-w-[16rem] max-w-4xl inline-block shadow-md ${msg.sender === 'bot' ? 'mx-auto' : ''}">
+            ${msg.sender === 'bot' ? formatAIResponse(msg.content) : msg.content.replace(/\n/g, '<br>')}
+          </div>
+        `;
+        chatContainer.appendChild(msgDiv);
+      });
+      updateChatList();
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      const chatFormContainer = document.getElementById('chat-form-container');
+      if (chatFormContainer) {
+        chatFormContainer.classList.remove('initial');
+      }
+    }
+    function saveCurrentChat() {
+      const chatContainer = document.getElementById('chat');
+      if (!chatContainer) return;
+      const messages = Array.from(chatContainer.children).map(el => {
+        return {
+          sender: el.classList.contains('justify-end') ? 'user' : 'bot',
+          content: el.querySelector('div').innerText
+        };
+      });
+      chats[currentChatId] = {
+        title: chats[currentChatId]?.title || 'New Chat',
+        messages: messages,
+        timestamp: Date.now()
+      };
+      saveChats();
+    }
+    function triggerLogoAnimation() {
+      const logoImg = document.getElementById('logo-img');
+      if (logoImg) {
+        logoImg.src = logoImg.src.split('?')[0] + `?t=${Date.now()}`;
+      }
+    }
+    const toggleBtn = document.getElementById("toggle-chat-mode");
+    const textChatSection = document.getElementById("text-chat-section");
+    const voiceChatSection = document.getElementById("voice-chat-section");
+    const voiceStatus = document.getElementById("voice-status");
+    const voiceMicBtn = document.getElementById("voice-mic-btn");
+    const voiceChatMessages = document.getElementById("voice-chat-messages");
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("chat-input");
+    const chat = document.getElementById("chat");
+    const textMicBtn = document.getElementById("text-mic-btn");
+    const submitBtn = document.getElementById("submit-btn");
+    const sidebar = document.getElementById('sidebar');
+    const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+    const leftArrowBtn = document.getElementById('left-arrow-btn');
+    function toggleSidebar() {
+      if (!sidebar || !leftArrowBtn) {
+        console.warn('Sidebar or left arrow button not found');
+        return;
+      }
+      sidebar.classList.toggle('collapsed');
+      document.querySelector('main').classList.toggle('sidebar-collapsed');
+      toggleSidebarBtn.textContent = sidebar.classList.contains('collapsed') ? '→' : '←';
+      leftArrowBtn.classList.toggle('hidden', !sidebar.classList.contains('collapsed'));
+    }
+    if (toggleSidebarBtn) {
+      toggleSidebarBtn.addEventListener('click', toggleSidebar);
+    }
+    if (leftArrowBtn) {
+      leftArrowBtn.addEventListener('click', toggleSidebar);
+    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const speechSynthesis = window.speechSynthesis;
+    let recognition;
+    let isVoiceMode = false;
+    let isListening = false;
+    let currentUtterance = null;
+    let isTyping = false;
+    let stopTyping = false;
+    if (toggleBtn) {
+      toggleBtn.addEventListener("click", () => {
+        isVoiceMode = !isVoiceMode;
+        if (isVoiceMode) {
+          textChatSection.style.display = "none";
+          voiceChatSection.style.display = "flex";
+          voiceChatMessages.style.display = "block";
+          toggleBtn.textContent = "⌨ Switch to Text Chat";
+        } else {
+          textChatSection.style.display = "block";
+          voiceChatSection.style.display = "none";
+          voiceChatMessages.style.display = "none";
+          toggleBtn.textContent = "🎤 Switch to Voice Chat";
+        }
+      });
+    }
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (isTyping) {
+          stopTyping = true;
+          return;
+        }
+        const msg = input.value.trim();
+        if (!msg) return;
+        const chatId = currentChatId;
+        appendMessage(msg, 'user', chatId);
+        input.value = "";
+        input.disabled = true;
+        const chatFormContainer = document.getElementById('chat-form-container');
+        if (chatFormContainer) {
+          chatFormContainer.classList.remove('initial');
+        }
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'loading-animation';
+        loadingDiv.innerHTML = `
+          <svg class="loading-svg" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#6e45e2;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#88d3ce;stop-opacity:1" />
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <path d="M10 10 Q15 25 20 10 Q25 0 30 10 Q35 25 40 10 Q45 0 50 10 Q55 25 60 10 Q65 0 70 10" 
+                  fill="none" stroke="url(#gradient)" stroke-width="4" stroke-linecap="round" filter="url(#glow)">
+              <animate attributeName="d" 
+                       values="M10 10 Q15 25 20 10 Q25 0 30 10 Q35 25 40 10 Q45 0 50 10 Q55 25 60 10 Q65 0 70 10;
+                               M12 10 Q17 25 22 10 Q27 0 32 10 Q37 25 42 10 Q47 0 52 10 Q57 25 62 10 Q67 0 72 10;
+                               M14 10 Q19 25 24 10 Q29 0 34 10 Q39 25 44 10 Q49 0 54 10 Q59 25 64 10 Q69 0 74 10;
+                               M10 10 Q15 25 20 10 Q25 0 30 10 Q35 25 40 10 Q45 0 50 10 Q55 25 60 10 Q65 0 70 10" 
+                       dur="1.5s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+        `;
+        chat.appendChild(loadingDiv);
+        chat.scrollTop = chat.scrollHeight;
+        try {
+          const res = await fetch("/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: msg, chat_id: chatId }),
+          });
+          const data = await res.json();
+          loadingDiv.remove();
+          if (chatId === currentChatId) {
+            await typeMessage(data.reply, 'bot', chatId);
+          }
+        } catch (err) {
+          console.warn('Error sending message:', err);
+          loadingDiv.remove();
+        }
+        input.disabled = false;
+        saveCurrentChat();
+      });
+    }
+    if (input) {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          form.dispatchEvent(new Event('submit'));
+        }
+      });
+    }
+    async function typeMessage(text, sender, chatId) {
+      if (chatId !== currentChatId) return;
+      isTyping = true;
+      stopTyping = false;
+      if (submitBtn) {
+        submitBtn.textContent = "⏹️ Stop";
+        submitBtn.classList.add("bg-red-600", "hover:bg-red-700", "scale-110", "transition-transform");
+        submitBtn.classList.remove("bg-purple-600", "hover:bg-purple-700");
+      }
+      input.disabled = true;
+      const botMsgDiv = document.createElement('div');
+      botMsgDiv.className = `flex justify-center animate-fadeInUp`;
+      botMsgDiv.innerHTML = `
+        <div class="bot-message text-white max-w-4xl mx-auto">
+          <div class="message-content"></div>
+          <div class="interrupted-text hidden">Interrupted <button class="continue-btn">Continue</button></div>
+        </div>
+      `;
+      chat.appendChild(botMsgDiv);
+      const contentDiv = botMsgDiv.querySelector('.message-content');
+      const interruptedDiv = botMsgDiv.querySelector('.interrupted-text');
+      let i = interruptedMessage && interruptedMessage.text === text ? interruptedIndex : 0;
+      const chunkSize = 5;
+      const typingSpeed = 30;
+      interruptedMessage = { text, sender, botMsgDiv };
+      while (i < text.length && !stopTyping) {
+        const end = Math.min(i + chunkSize, text.length);
+        contentDiv.innerHTML = formatAIResponse(text.substring(0, end));
+        chat.scrollTop = chat.scrollHeight;
+        i = end;
+        await new Promise(resolve => setTimeout(resolve, typingSpeed));
+      }
+      if (submitBtn) {
+        submitBtn.textContent = "Send";
+        submitBtn.classList.remove("bg-red-600", "hover:bg-red-700", "scale-110", "transition-transform");
+        submitBtn.classList.add("bg-purple-600", "hover:bg-purple-700");
+      }
+      input.disabled = false;
+      isTyping = false;
+      if (stopTyping) {
+        interruptedDiv.classList.remove('hidden');
+        interruptedIndex = i;
+        const continueBtn = botMsgDiv.querySelector('.continue-btn');
+        if (continueBtn) {
+          continueBtn.addEventListener('click', () => continueTyping(text, sender, botMsgDiv));
+        }
+      } else {
+        interruptedMessage = null;
+        interruptedIndex = 0;
+      }
+      if (contentDiv.querySelector('pre code')) {
+        hljs.highlightAll();
+      }
+    }
+    async function continueTyping(text, sender, botMsgDiv) {
+      isTyping = true;
+      stopTyping = false;
+      if (submitBtn) {
+        submitBtn.textContent = "⏹️ Stop";
+        submitBtn.classList.add("bg-red-600", "hover:bg-red-700", "scale-110", "transition-transform");
+        submitBtn.classList.remove("bg-purple-600", "hover:bg-purple-700");
+      }
+      input.disabled = true;
+      const contentDiv = botMsgDiv.querySelector('.message-content');
+      const interruptedDiv = botMsgDiv.querySelector('.interrupted-text');
+      interruptedDiv.classList.add('hidden');
+      let i = interruptedIndex;
+      const chunkSize = 5;
+      const typingSpeed = 30;
+      while (i < text.length && !stopTyping) {
+        const end = Math.min(i + chunkSize, text.length);
+        contentDiv.innerHTML = formatAIResponse(text.substring(0, end));
+        chat.scrollTop = chat.scrollHeight;
+        i = end;
+        await new Promise(resolve => setTimeout(resolve, typingSpeed));
+      }
+      if (submitBtn) {
+        submitBtn.textContent = "Send";
+        submitBtn.classList.remove("bg-red-600", "hover:bg-red-700", "scale-110", "transition-transform");
+        submitBtn.classList.add("bg-purple-600", "hover:bg-purple-700");
+      }
+      input.disabled = false;
+      isTyping = false;
+      if (stopTyping) {
+        interruptedDiv.classList.remove('hidden');
+        interruptedIndex = i;
+        const continueBtn = botMsgDiv.querySelector('.continue-btn');
+        if (continueBtn) {
+          continueBtn.addEventListener('click', () => continueTyping(text, sender, botMsgDiv));
+        }
+      } else {
+        interruptedMessage = null;
+        interruptedIndex = 0;
+      }
+      if (contentDiv.querySelector('pre code')) {
+        hljs.highlightAll();
+      }
+    }
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+      if (voiceMicBtn) {
+        voiceMicBtn.addEventListener("click", toggleVoiceInput);
+      }
+      recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0])
+          .map(result => result.transcript)
+          .join('');
+        if (event.results[0].isFinal) {
+          handleUserVoiceInput(transcript);
+        }
+      };
+      recognition.onerror = (event) => {
+        console.warn("Speech recognition error:", event.error);
+        if (voiceStatus) {
+          voiceStatus.textContent = "Error: " + event.error;
+        }
+        resetVoiceUI();
+      };
+    } else {
+      if (voiceMicBtn) {
+        voiceMicBtn.disabled = true;
+      }
+      if (voiceStatus) {
+        voiceStatus.textContent = "Voice not supported in your browser";
+      }
+    }
+    function toggleVoiceInput() {
+      if (isListening) {
+        recognition.stop();
+        resetVoiceUI();
+      } else {
+        try {
+          recognition.start();
+          if (voiceMicBtn) {
+            voiceMicBtn.classList.add("pulse-animation", "bg-red-600");
+            voiceMicBtn.classList.remove("bg-red-500");
+          }
+          if (voiceStatus) {
+            voiceStatus.textContent = "Listening... Speak now";
+          }
+          isListening = true;
+        } catch (err) {
+          console.warn('Error starting speech recognition:', err);
+          resetVoiceUI();
+        }
+      }
+    }
+    async function handleUserVoiceInput(userSpeech) {
+      const chatId = currentChatId;
+      const userMsgDiv = createVoiceMessageDiv(userSpeech, 'user', chatId);
+      if (voiceChatMessages) {
+        voiceChatMessages.appendChild(userMsgDiv);
+        voiceChatMessages.scrollTop = voiceChatMessages.scrollHeight;
+      }
+      const loadingDiv = createVoiceMessageDiv('', 'bot', chatId);
+      loadingDiv.innerHTML = `
+        <div class="loading-animation">
+          <svg class="loading-svg" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#6e45e2;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#88d3ce;stop-opacity:1" />
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <path d="M10 10 Q15 25 20 10 Q25 0 30 10 Q35 25 40 10 Q45 0 50 10 Q55 25 60 10 Q65 0 70 10" 
+                  fill="none" stroke="url(#gradient)" stroke-width="4" stroke-linecap="round" filter="url(#glow)">
+              <animate attributeName="d" 
+                       values="M10 10 Q15 25 20 10 Q25 0 30 10 Q35 25 40 10 Q45 0 50 10 Q55 25 60 10 Q65 0 70 10;
+                               M12 10 Q17 25 22 10 Q27 0 32 10 Q37 25 42 10 Q47 0 52 10 Q57 25 62 10 Q67 0 72 10;
+                               M14 10 Q19 25 24 10 Q29 0 34 10 Q39 25 44 10 Q49 0 54 10 Q59 25 64 10 Q69 0 74 10;
+                               M10 10 Q15 25 20 10 Q25 0 30 10 Q35 25 40 10 Q45 0 50 10 Q55 25 60 10 Q65 0 70 10" 
+                       dur="1.5s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+        </div>
+      `;
+      if (voiceChatMessages) {
+        voiceChatMessages.appendChild(loadingDiv);
+      }
+      try {
+        const res = await fetch("/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userSpeech, chat_id: chatId }),
+        });
+        const data = await res.json();
+        if (voiceChatMessages) {
+          loadingDiv.remove();
+        }
+        if (chatId === currentChatId) {
+          await typeAndSpeakAIResponse(data.reply, chatId);
+        }
+      } catch (err) {
+        console.warn('Error sending voice message:', err);
+        if (voiceChatMessages) {
+          loadingDiv.remove();
+        }
+      }
+    }
+    async function typeAndSpeakAIResponse(text, chatId) {
+      if (chatId !== currentChatId) return;
+      const botMsgDiv = createVoiceMessageDiv('', 'bot', chatId);
+      botMsgDiv.innerHTML = `
+        <div class="bot-message text-white max-w-4xl mx-auto">
+          <div class="message-content"></div>
+          <div class="interrupted-text hidden">Interrupted <button class="continue-btn">Continue</button></div>
+        </div>
+      `;
+      if (voiceChatMessages) {
+        voiceChatMessages.appendChild(botMsgDiv);
+        voiceChatMessages.scrollTop = voiceChatMessages.scrollHeight;
+      }
+      const contentDiv = botMsgDiv.querySelector('.message-content');
+      const interruptedDiv = botMsgDiv.querySelector('.interrupted-text');
+      speakResponse(text);
+      let i = interruptedMessage && interruptedMessage.text === text ? interruptedIndex : 0;
+      while (i < text.length && !stopTyping) {
+        contentDiv.innerHTML = formatAIResponse(text.substring(0, i + 1));
+        if (voiceChatMessages) {
+          voiceChatMessages.scrollTop = voiceChatMessages.scrollHeight;
+        }
+        i++;
+        await new Promise(resolve => setTimeout(resolve, 20));
+      }
+      if (stopTyping) {
+        interruptedDiv.classList.remove('hidden');
+        interruptedMessage = { text, sender: 'bot', botMsgDiv };
+        interruptedIndex = i;
+        const continueBtn = botMsgDiv.querySelector('.continue-btn');
+        if (continueBtn) {
+          continueBtn.addEventListener('click', () => continueTyping(text, 'bot', botMsgDiv));
+        }
+      } else {
+        interruptedMessage = null;
+        interruptedIndex = 0;
+      }
+      if (contentDiv.querySelector('pre code')) {
+        hljs.highlightAll();
+      }
+    }
+    function speakResponse(text) {
+      if (currentUtterance) {
+        speechSynthesis.cancel();
+      }
+      let filteredText = text.replace(/0/g, '').replace(/[\u{1F600}-\u{1F6FF}]/gu, '');
+      currentUtterance = new SpeechSynthesisUtterance(filteredText);
+      const voices = speechSynthesis.getVoices();
+      const naturalVoice = voices.find(v => 
+        v.name.includes('Google') || 
+        v.name.includes('Microsoft') || 
+        v.name.includes('Natural')
+      );
+      if (naturalVoice) {
+        currentUtterance.voice = naturalVoice;
+      }
+      currentUtterance.rate = 1.1;
+      currentUtterance.pitch = 1.2;
+      speechSynthesis.speak(currentUtterance);
+    }
+    function resetVoiceUI() {
+      if (voiceMicBtn) {
+        voiceMicBtn.classList.remove("pulse-animation", "bg-red-600");
+        voiceMicBtn.classList.add("bg-red-500");
+      }
+      if (voiceStatus) {
+        voiceStatus.textContent = "Press mic to start speaking";
+      }
+      isListening = false;
+    }
+    function appendMessage(text, sender, chatId) {
+      if (chatId !== currentChatId) return;
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-center'} animate-fadeInUp`;
+      msgDiv.innerHTML = `
+        <div class="${sender === 'user' ? 'bg-gray-700/70 backdrop-blur-sm user-message' : 'bot-message'} text-white ${sender === 'user' ? 'p-2 rounded-lg' : ''} max-w-fit min-w-[16rem] max-w-4xl inline-block shadow-md ${sender === 'bot' ? 'mx-auto' : ''}">
+          ${sender === 'user' ? text.replace(/\n/g, '<br>') : formatAIResponse(text)}
+        </div>
+      `;
+      chat.appendChild(msgDiv);
+      chat.scrollTop = chat.scrollHeight;
+    }
+    function createVoiceMessageDiv(text, sender, chatId) {
+      if (chatId !== currentChatId) return document.createElement('div');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-center'} animate-fadeInUp mb-3`;
+      msgDiv.innerHTML = `
+        <div class="${sender === 'user' ? 'bg-gray-700/70 backdrop-blur-sm user-message' : 'bot-message'} text-white ${sender === 'user' ? 'p-2 rounded-lg' : ''} max-w-fit min-w-[16rem] max-w-4xl inline-block shadow-md ${sender === 'bot' ? 'mx-auto' : ''}">
+          ${sender === 'user' ? text.replace(/\n/g, '<br>') : formatAIResponse(text)}
+        </div>
+      `;
+      return msgDiv;
+    }
+    function formatAIResponse(text) {
+      try {
+        let codeBlockCounter = 0;
+        const codeBlockMap = new Map();
+        text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+          lang = lang || 'plaintext';
+          const placeholder = `__CODE_BLOCK_${codeBlockCounter}__`;
+          codeBlockMap.set(placeholder, `
+            <div class="code-block mt-2 mb-3">
+              <div class="code-header">
+                <span>${lang}</span>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code class="language-${lang}">${code.trim()}</code></pre>
+            </div>
+          `);
+          codeBlockCounter++;
+          return placeholder;
+        });
+        text = text.replace(/^#heading\s*([\s\S]*?)\s*#heading$/gm, '<h2 class="heading">$1</h2>');
+        text = text.replace(/^#point\s*([\s\S]*?)\s*#point$/gm, (match, content) => {
+          return `<span class="point">${content.trim().replace(/\n/g, '<br>')}</span>`;
+        });
+        text = text.replace(/•([\s\S]*?)(?=\n•|$)/g, (match, content) => {
+          const formattedContent = content.trim().replace(/\n/g, '<br>');
+          return `<span class="bullet-point">${formattedContent}</span>`;
+        });
+        text = text.replace(/\*\*([^*]*?)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/\*([^*]*?)\*/g, '<em>$1</em>');
+        text = text.replace(/\n/g, '<br>');
+        codeBlockMap.forEach((value, placeholder) => {
+          text = text.replace(placeholder, value);
+        });
+        return text;
+      } catch (err) {
+        console.warn('Error formatting AI response:', err);
+        return text.replace(/\n/g, '<br>');
+      }
+    }
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('copy-btn')) {
+        const code = e.target.parentElement.nextElementSibling.textContent;
+        navigator.clipboard.writeText(code);
+        e.target.textContent = 'Copied!';
+        setTimeout(() => {
+          e.target.textContent = 'Copy';
+        }, 2000);
+      }
+    });
+    if (SpeechRecognition && textMicBtn) {
+      const textRecognition = new SpeechRecognition();
+      textRecognition.lang = 'en-US';
+      textRecognition.interimResults = false;
+      textMicBtn.addEventListener('click', () => {
+        try {
+          textRecognition.start();
+          textMicBtn.classList.add("bg-purple-700");
+          input.placeholder = "Listening...";
+        } catch (err) {
+          console.warn('Error starting text recognition:', err);
+        }
+      });
+      textRecognition.onresult = (event) => {
+        input.value = event.results[0][0].transcript;
+        input.placeholder = "Type your message...";
+        textMicBtn.classList.remove("bg-purple-700");
+      };
+      textRecognition.onerror = (err) => {
+        console.warn('Text recognition error:', err);
+        input.placeholder = "Type your message...";
+        textMicBtn.classList.remove("bg-purple-700");
+      };
+    } else if (textMicBtn) {
+      textMicBtn.disabled = true;
+      textMicBtn.title = "Voice input not supported";
+    }
+    const imageGenBtn = document.getElementById("image-gen-btn");
+    if (imageGenBtn) {
+      imageGenBtn.addEventListener("click", () => {
+        textChatSection.style.display = "none";
+        voiceChatSection.style.display = "none";
+        const imageGenSection = document.getElementById("image-gen-section");
+        if (imageGenSection) {
+          imageGenSection.style.display = "flex";
+        }
+        const generatedImages = document.getElementById("generated-images");
+        if (generatedImages) {
+          generatedImages.innerHTML = "";
+        }
+        const imagePrompt = document.getElementById("image-prompt");
+        if (imagePrompt) {
+          imagePrompt.value = "";
+        }
+      });
+    }
+    const backToChatBtn = document.getElementById("back-to-chat-btn");
+    if (backToChatBtn) {
+      backToChatBtn.addEventListener("click", () => {
+        textChatSection.style.display = "block";
+        const imageGenSection = document.getElementById("image-gen-section");
+        if (imageGenSection) {
+          imageGenSection.style.display = "none";
+        }
+      });
+    }
+    const generateImageBtn = document.getElementById("generate-image-btn");
+    if (generateImageBtn) {
+      generateImageBtn.addEventListener("click", async () => {
+        const imagePrompt = document.getElementById("image-prompt");
+        if (!imagePrompt) return;
+        const prompt = imagePrompt.value.trim();
+        if (!prompt) {
+          alert("Please enter an image description");
+          return;
+        }
+        generateImageBtn.disabled = true;
+        generateImageBtn.textContent = "Generating...";
+        try {
+          const apiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
+          const response = await fetch(apiUrl);
+          if (!response.ok) {
+            throw new Error(`API Error: ${response.status}`);
+          }
+          const imageBlob = await response.blob();
+          const imageUrl = URL.createObjectURL(imageBlob);
+          const generatedImages = document.getElementById("generated-images");
+          if (generatedImages) {
+            generatedImages.innerHTML = `
+              <div class="bg-gray-800 p-4 rounded-lg">
+                <img src="${imageUrl}" class="w-full generated-image rounded-lg" alt="Generated Image">
+                <p class="mt-2 text-gray-400"><strong>Prompt:</strong> ${prompt}</p>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error("Image generation failed:", error);
+          alert("Image generation failed. Please try again.");
+        } finally {
+          generateImageBtn.disabled = false;
+          generateImageBtn.textContent = "Generate Image";
+        }
+      });
+    }
+    const newChatBtn = document.getElementById("new-chat-btn");
+    if (newChatBtn) {
+      newChatBtn.addEventListener('click', startNewChat);
+    }
+    init();
+  </script>
+</body>
+</html>
