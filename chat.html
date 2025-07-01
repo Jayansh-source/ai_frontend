@@ -500,7 +500,7 @@
       delete chats[chatId];
       saveChats();
       try {
-        const res = await fetch(`https://ai-backend-hwh.onrender.com/clear_memory/${chatId}`, { method: 'POST' });
+        const res = await fetch(`https://ai-backend-owo.onrender.com/clear_memory/${chatId}`, { method: 'POST' });
         const data = await res.json();
         console.log(data.message);
       } catch (err) {
